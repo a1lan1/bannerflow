@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
         if (! app()->isProduction()) {
             $this->call([
                 UserSeeder::class,
+                BannerCampaignSeeder::class,
+                BannerPlacementSeeder::class,
+                BannerSeeder::class,
+                BannerScheduleSeeder::class,
+                BannerEventSeeder::class,
+                BannerStatisticSeeder::class,
             ]);
         }
     }
