@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Jobs\Banner\AggregateBannerStatisticsJob;
 use Illuminate\Support\Facades\Schedule;
 
 // Telescope
@@ -13,3 +14,6 @@ Schedule::command('backup:clean')->daily()->at('20:00');
 
 // Demo Notifications
 Schedule::command('app:send-demo-notification')->everyThirtyMinutes();
+
+// Banner
+Schedule::job(new AggregateBannerStatisticsJob)->hourly();
