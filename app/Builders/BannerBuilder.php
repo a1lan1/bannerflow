@@ -5,10 +5,28 @@ declare(strict_types=1);
 namespace App\Builders;
 
 use App\Enums\Banner\BannerStatusEnum;
+use App\Models\Banner;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @template TModelClass of Banner
+ *
+ * @extends Builder<TModelClass>
+ */
 class BannerBuilder extends Builder
 {
+    public function whereSearch(string $search): self
+    {
+        $searchTerm = strtolower($search);
+
+        return $this->where(function (Builder $q) use ($searchTerm): void {
+            $q->whereRaw('LOWER(name) LIKE ?', ['%'.$searchTerm.'%'])
+                ->orWhereHas('campaign', function (Builder $companyQuery) use ($searchTerm): void {
+                    $companyQuery->whereRaw('LOWER(name) LIKE ?', ['%'.$searchTerm.'%']);
+                });
+        });
+    }
+
     /**
      * Только активные (status = 'active').
      */
@@ -23,7 +41,7 @@ class BannerBuilder extends Builder
      */
     public function whereStarted(): self
     {
-        return $this->where(function ($query): void {
+        return $this->where(function (Builder $query): void {
             $query->whereNull('starts_at')
                 ->orWhere('starts_at', '<=', now());
         });
