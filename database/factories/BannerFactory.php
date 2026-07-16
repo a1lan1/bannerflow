@@ -6,9 +6,11 @@ namespace Database\Factories;
 
 use App\Enums\Banner\BannerStatusEnum;
 use App\Enums\Banner\BannerTargetEnum;
+use App\Enums\MediaCollection;
 use App\Models\Banner;
 use App\Models\BannerCampaign;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 
 /**
  * @extends Factory<Banner>
@@ -75,5 +77,22 @@ class BannerFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'campaign_id' => BannerCampaign::factory(),
         ]);
+    }
+
+    public function withDefaultImage(): Factory
+    {
+        return $this->afterCreating(function (Banner $banner): void {
+            $files = File::glob(database_path('seeders/data/sample_banner_*.svg'));
+
+            if (empty($files)) {
+                return;
+            }
+
+            $randomFile = $files[array_rand($files)];
+
+            $banner->addMedia($randomFile)
+                ->preservingOriginal()
+                ->toMediaCollection(MediaCollection::BannerImage->value);
+        });
     }
 }
