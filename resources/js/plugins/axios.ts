@@ -3,7 +3,7 @@ import type { AxiosInstance } from 'axios'
 import type { App } from 'vue'
 
 export const api: AxiosInstance = axios.create({
-  baseURL: '/',
+  baseURL: '/api',
   withCredentials: true,
   withXSRFToken: true,
   headers: {

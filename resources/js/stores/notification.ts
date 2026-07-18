@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { api } from '@/plugins/axios'
 import type { UserNotification } from '@/types'
 
 export const useNotificationStore = defineStore('notification', () => {
@@ -12,9 +12,9 @@ export const useNotificationStore = defineStore('notification', () => {
     loading.value = true
 
     try {
-      const response = await axios.get('/api/notifications')
-      notifications.value = response.data.notifications
-      unreadCount.value = response.data.unread_count
+      const { data } = await api.get('/notifications')
+      notifications.value = data.notifications
+      unreadCount.value = data.unread_count
     } catch (error) {
       console.error('Failed to fetch notifications:', error)
     } finally {
@@ -24,7 +24,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   const markAsRead = async(id: string) => {
     try {
-      await axios.post(`/api/notifications/${id}/read`)
+      await api.post(`/notifications/${id}/read`)
       const notification = notifications.value.find(n => n.id === id)
 
       if (notification && !notification.read_at) {
@@ -38,7 +38,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   const markAllAsRead = async() => {
     try {
-      await axios.post('/api/notifications/read')
+      await api.post('/notifications/read')
       notifications.value.forEach(n => n.read_at = new Date().toISOString())
       unreadCount.value = 0
     } catch (error) {
@@ -48,7 +48,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   const removeNotification = async(id: string) => {
     try {
-      await axios.delete(`/api/notifications/${id}`)
+      await api.delete(`/notifications/${id}`)
       const index = notifications.value.findIndex(n => n.id === id)
 
       if (index !== -1) {
