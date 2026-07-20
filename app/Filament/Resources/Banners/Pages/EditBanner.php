@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Banners\Pages;
 
-use App\Actions\Banner\SyncBannerScheduleAction;
 use App\Data\Banner\ScheduleData;
 use App\Filament\Resources\Banners\BannerResource;
+use App\Interfaces\Actions\Banner\SyncBannerScheduleActionInterface;
 use App\Models\Banner;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
@@ -58,7 +58,7 @@ class EditBanner extends EditRecord
             /** @var Banner $banner */
             $banner = $this->getRecord();
 
-            resolve(SyncBannerScheduleAction::class)->execute(
+            resolve(SyncBannerScheduleActionInterface::class)->execute(
                 $banner,
                 new DataCollection(ScheduleData::class, $this->scheduleData)
             );
