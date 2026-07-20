@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Builders;
 
+use App\Enums\Banner\BannerEventTypeEnum;
 use App\Enums\Banner\BannerStatusEnum;
 use App\Models\Banner;
 use Illuminate\Database\Eloquent\Builder;
@@ -69,5 +70,28 @@ class BannerBuilder extends Builder
             ->whereActive()
             ->whereStarted()
             ->whereNotExpired();
+    }
+
+    public function withEventCounts(): self
+    {
+        return $this->withCount([
+            'events as impressions_count' => fn (Builder $q) => $q->where('type', BannerEventTypeEnum::IMPRESSION),
+            'events as clicks_count' => fn (Builder $q) => $q->where('type', BannerEventTypeEnum::CLICK),
+            'events as daily_impressions_count' => fn (Builder $q) => $q->where('type', BannerEventTypeEnum::IMPRESSION)->whereDate('created_at', today()),
+            'events as daily_clicks_count' => fn (Builder $q) => $q->where('type', BannerEventTypeEnum::CLICK)->whereDate('created_at', today()),
+        ]);
+    }
+
+    public function availableBySchedule(): self
+    {
+        $now = now();
+
+        return $this->where(function (Builder $query) use ($now): void {
+            $query->whereDoesntHave('schedule')
+                ->orWhereHas('schedule', function (Builder $q) use ($now): void {
+                    $q->where('day_of_week', $now->dayOfWeek)
+                        ->where('hour', $now->hour);
+                });
+        });
     }
 }
