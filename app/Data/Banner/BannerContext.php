@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Banner;
 
+use App\Models\BannerPlacement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -37,8 +38,10 @@ final class BannerContext extends Data
 
     public static function fromRequest(Request $request): self
     {
+        $placement = $request->route('placement');
+
         return new self(
-            placement: $request->route('placement'),
+            placement: $placement instanceof BannerPlacement ? $placement->slug : $placement,
             sessionId: $request->session()->getId(),
             ip: $request->ip(),
             country: $request->header('CF-IPCountry'),
