@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace App\Actions\Banner;
 
 use App\Enums\Banner\BannerEventTypeEnum;
+use App\Interfaces\Actions\Banner\AggregateBannerStatisticsActionInterface;
 use App\Models\BannerEvent;
 use App\Models\BannerStatistic;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
-final readonly class AggregateBannerStatisticsAction
+final readonly class AggregateBannerStatisticsAction implements AggregateBannerStatisticsActionInterface
 {
     public function execute(?Carbon $date = null): void
     {
         $date ??= today();
 
+        /** @var Collection<int, BannerEvent&object{hour: int, impressions: int, clicks: int}> $rows */
         $rows = BannerEvent::query()
             ->whereDate('created_at', $date)
             ->selectRaw('

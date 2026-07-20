@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Actions\Banner;
 
 use App\Data\Banner\ScheduleData;
+use App\Interfaces\Actions\Banner\SyncBannerScheduleActionInterface;
 use App\Models\Banner;
 use Spatie\LaravelData\DataCollection;
 
-final readonly class SyncBannerScheduleAction
+final readonly class SyncBannerScheduleAction implements SyncBannerScheduleActionInterface
 {
     /**
      * @param  DataCollection<int, ScheduleData>  $schedule

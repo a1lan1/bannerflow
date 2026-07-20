@@ -6,11 +6,12 @@ namespace App\Actions\Banner;
 
 use App\Data\Banner\BannerContext;
 use App\Enums\Banner\BannerEventTypeEnum;
+use App\Interfaces\Actions\Banner\RecordBannerImpressionActionInterface;
 use App\Models\Banner;
 use App\Models\BannerEvent;
 use App\Models\BannerPlacement;
 
-final readonly class RecordBannerImpressionAction
+final readonly class RecordBannerImpressionAction implements RecordBannerImpressionActionInterface
 {
     public function execute(
         Banner $banner,
