@@ -11,6 +11,10 @@ use Override;
 
 class StatsOverview extends StatsOverviewWidget
 {
+    protected static bool $isDiscovered = false;
+
+    protected ?string $pollingInterval = '15s';
+
     #[Override]
     protected function getStats(): array
     {

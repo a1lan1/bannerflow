@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\StatsOverview;
-use App\Filament\Widgets\UsersChart;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Override;
 
@@ -17,7 +15,7 @@ class Dashboard extends BaseDashboard
     protected function getHeaderWidgets(): array
     {
         return [
-            StatsOverview::class,
+            //
         ];
     }
 
@@ -25,7 +23,7 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            UsersChart::class,
+            //
         ];
     }
 }

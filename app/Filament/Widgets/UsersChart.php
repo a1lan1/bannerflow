@@ -14,7 +14,11 @@ class UsersChart extends ChartWidget
 {
     protected ?string $heading = 'New User Registrations';
 
+    protected static bool $isDiscovered = false;
+
     protected ?string $pollingInterval = '15s';
+
+    protected ?string $maxHeight = '400px';
 
     #[Override]
     protected function getData(): array
