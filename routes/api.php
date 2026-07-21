@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\V1\Banner\BannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +16,14 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
         Route::post('read', [NotificationController::class, 'markAllAsRead'])->name('read_all');
         Route::post('{id}/read', [NotificationController::class, 'markAsRead'])->name('read');
         Route::delete('{id}', [NotificationController::class, 'destroy'])->name('destroy');
+    });
+
+    // v1
+    Route::prefix('v1')->name('api.v1.')->group(function (): void {
+        // Banners
+        Route::prefix('banners')->name('banners.')->group(function (): void {
+            Route::get('', [BannerController::class, 'index'])->name('index');
+            Route::get('{placement}', [BannerController::class, 'show'])->name('show');
+        });
     });
 });
