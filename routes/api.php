@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\V1\Banner\BannerController;
 use App\Http\Controllers\Api\V1\Banner\BannerScheduleController;
+use App\Http\Controllers\Api\V1\Banner\TrackBannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,11 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
             Route::prefix('schedule')->name('schedule.')->group(function (): void {
                 Route::get('{banner}', [BannerScheduleController::class, 'index'])->name('index');
                 Route::put('{banner}', [BannerScheduleController::class, 'update'])->name('update');
+            });
+
+            Route::prefix('{banner}')->scopeBindings()->group(function (): void {
+                Route::post('placements/{placement:slug}/impression', [TrackBannerController::class, 'handleImpression'])->name('impression');
+                Route::post('placements/{placement:slug}/click', [TrackBannerController::class, 'handleClick'])->name('click');
             });
         });
     });
