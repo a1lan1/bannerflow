@@ -15,12 +15,16 @@ class BannerPlacementSeeder extends Seeder
      */
     public function run(): void
     {
-        BannerPlacement::factory(random_int(5, 10))
-            ->active()
-            ->create();
+        $placements = [
+            ['name' => 'Header Banner', 'slug' => 'header-banner'],
+            ['name' => 'Sidebar Banner', 'slug' => 'sidebar-banner'],
+            ['name' => 'Footer Banner', 'slug' => 'footer-banner'],
+        ];
 
-        BannerPlacement::factory(random_int(5, 10))
-            ->inactive()
-            ->create();
+        foreach ($placements as $placement) {
+            BannerPlacement::factory()
+                ->active()
+                ->create($placement);
+        }
     }
 }

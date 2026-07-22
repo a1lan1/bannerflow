@@ -31,10 +31,15 @@ class BannerScheduleSeeder extends Seeder
 
             // Mix and take a random amount (1-7)
             shuffle($availableSlots);
-            $slotsToCreate = random_int(1, 7);
+
+            $slotsToCreate = match (random_int(1, 10)) {
+                1, 2 => random_int(40, 55), // 20% of banners are very active
+                3, 4, 5 => random_int(22, 38), // 30% - middle
+                default => random_int(8, 20), // 50% — rare
+            };
+
             $selectedSlots = array_slice($availableSlots, 0, $slotsToCreate);
 
-            // We create records with unique combinations
             foreach ($selectedSlots as $slot) {
                 BannerSchedule::factory()
                     ->for($banner)
