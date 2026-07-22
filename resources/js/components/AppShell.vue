@@ -21,6 +21,8 @@ withDefaults(defineProps<Props>(), {
   variant: 'sidebar'
 })
 
+const reverbEnabled = !!import.meta.env.VITE_REVERB_APP_KEY
+
 const page = usePage()
 
 const authStore = useAuthStore()
@@ -68,7 +70,7 @@ watch(
 )
 
 onMounted(() => {
-  if (user.value) {
+  if (user.value && reverbEnabled) {
     const userChannel = echo().private(`App.Models.User.${user.value.id}`)
 
     userChannel.notification(
